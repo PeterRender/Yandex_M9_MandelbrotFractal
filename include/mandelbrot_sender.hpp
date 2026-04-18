@@ -12,7 +12,8 @@ namespace mandelbrot {
 
 static auto MakeComputeSender(RenderSettings settings, ViewPort viewport) {
     static AvrTimeCounter time_counter;
-    return /* Ваш код для вычисления количества итераций, фрактала Мандельброта здесь */ |
+    return /* Ваш код для вычисления количества итераций, фрактала Мандельброта здесь */ ex::just(
+               (FrameBuffer *)nullptr) |  // временная заглушка nullptr, чтобы проект компилировался
            ex::then([](FrameBuffer *fb) {
                time_counter.End();
                if (time_counter.Count() % 10 == 0) {
