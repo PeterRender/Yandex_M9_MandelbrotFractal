@@ -59,7 +59,7 @@ public:
                    }));
         ex::sync_wait(std::move(initialize));
 
-        auto process_frame = ex::just(); // Ваш код здесь
+        auto process_frame = ex::just();  // Ваш код здесь
 
         auto repeated_pipeline = std::move(process_frame) | ex::then([this] { return state_->app_state.should_exit; }) |
                                  exec::repeat_effect_until();
