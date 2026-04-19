@@ -25,6 +25,14 @@ struct PixelRegion {
     std::uint32_t end_col{};
 };
 
+// Структура данных RGBA-пикселя
+struct alignas(4) RGBA {
+    uint8_t r{};
+    uint8_t g{};
+    uint8_t b{};
+    uint8_t a{};
+};
+
 struct ViewPort {
     double x_min{-2.5};
     double x_max{1.5};
