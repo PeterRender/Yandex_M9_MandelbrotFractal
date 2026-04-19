@@ -7,6 +7,7 @@
 // ===================== Compile-time config =====================
 
 inline constexpr std::uint32_t THREAD_POOL_SIZE = 8;
+inline constexpr int STATS_INTERVAL = 10;  // интервал вывода статистики, в кадрах
 
 // ===================== Render domain =====================
 
@@ -51,6 +52,7 @@ struct AppState {
     static constexpr ViewPort INITIAL_VIEWPORT{-2.5, 1.5, -2.0, 2.0};
 };
 
+// Класс точного таймера
 class FrameClock {
 public:
     FrameClock() { Reset(); }

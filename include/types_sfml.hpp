@@ -11,9 +11,7 @@
 
 #include "types_core.hpp"
 
-//
-// Holds the framebuffer data for rendering
-//
+// Буфер кадра в RAM
 struct FrameBuffer {
     std::uint32_t width{};
     std::uint32_t height{};
@@ -28,28 +26,33 @@ struct FrameBuffer {
     }
 };
 
-//
-// Must be created and accessed only from SFML thread
-//
+// Хранилище SFML-ресурсов, необходимых для рендеринга кадра
+// (должно создаваться и использоваться только в SFML-потоке)
 struct SfmlState {
-    RenderSettings render_settings;
-    AppState app_state;
+    RenderSettings render_settings;  // настройки рендеринга (размеры окна, параметры отрисовки фрактала)
+    AppState app_state;              // состояние приложения (вьюпорт, флаги мыши/выхода/перерисовки окна)
 
-    sf::RenderWindow window;
-    sf::Texture texture;
-    sf::Sprite sprite;
-    FrameBuffer fb;
+    // Графические ресурсы SFML
+    sf::RenderWindow window;  // SFML-окно
+    sf::Texture texture;      // текстура в VRAM
+    sf::Sprite sprite;        // спрайт для отрисовки посчитанной текстуры
+    FrameBuffer fb;           // буфер кадра в RAM
 
-    FrameClock frame_clock;
+    FrameClock frame_clock;  // таймер для расчета t синтеза кадра (используется в WaitForFPS)
 
+    // Создает окно и инициализирует графические ресурсы SFML
     explicit SfmlState(const RenderSettings &s)
         : render_settings(s),
           window(sf::VideoMode{render_settings.width, render_settings.height}, "Mandelbrot Fractal"),
           fb(FrameBuffer::Make(render_settings.width, render_settings.height)) {
 
+        // Отключаем повторение клавиш (одно событие при нажатии клавиши)
         window.setKeyRepeatEnabled(false);
 
+        // Создаем текстуру размером с окно (в VRAM)
         texture.create(render_settings.width, render_settings.height);
+
+        // Привязываем текстуру к спрайту
         sprite.setTexture(texture);
     }
 };
