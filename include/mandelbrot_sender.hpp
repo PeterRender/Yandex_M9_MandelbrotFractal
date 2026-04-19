@@ -41,15 +41,19 @@ static auto MakeComputeSender(RenderSettings settings, ViewPort viewport, bool &
     // повторяет тип рабочего пайпа с bulk и лямбдой, но не запускается на пуле потоков
 
     return ex::let_value([&do_update, comp_fractal_raw, settings](FrameBuffer *fb) {
-               time_counter.Start();
+               if (do_update) {
+                   time_counter.Start();
+               }
                // Пайп параллельного расчета фрактала (становится фиктивным при do_update == false)
                return ex::just(fb) | ex::bulk(ex::par, (do_update ? settings.height : 0u), comp_fractal_raw);
            }) |
-           ex::then([](FrameBuffer *fb) {
-               time_counter.End();
-               if (time_counter.Count() % STATS_INTERVAL == 0) {
-                   std::println("\nAverage compute time: {} ms over {} frames", time_counter.GetAvr(),
-                                time_counter.Count());
+           ex::then([&do_update](FrameBuffer *fb) {
+               if (do_update) {
+                   time_counter.End();
+                   if (time_counter.Count() % STATS_INTERVAL == 0) {
+                       std::println("\nAverage compute time: {} ms over {} frames", time_counter.GetAvr(),
+                                    time_counter.Count());
+                   }
                }
                return fb;
            });
