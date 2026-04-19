@@ -8,6 +8,8 @@
 
 inline constexpr std::uint32_t THREAD_POOL_SIZE = 8;
 inline constexpr int STATS_INTERVAL = 10;  // интервал вывода статистики, в кадрах
+inline constexpr uint8_t OPAQUE = 0xFF;
+inline constexpr uint8_t TRANSPARENT = 0x00;
 
 // ===================== Render domain =====================
 

@@ -33,7 +33,7 @@ public:
         }
     }
 
-private:
+protected:
     // Min интервал между операциями зума, в мс
     static constexpr float ZOOM_INTERVAL_MS = 100.0f;  // регулирует скорость зума при удержании кнопки мыши
 
@@ -115,10 +115,12 @@ private:
             state_.left_mouse_pressed = true;
             ZoomToPoint(mouse.x, mouse.y, true);
             state_.zoom_clock.restart();  // сбрасываем таймер после зума
+            state_.auto_zoom_enabled = false;
         } else if (mouse.button == sf::Mouse::Right) {
             state_.right_mouse_pressed = true;
             ZoomToPoint(mouse.x, mouse.y, false);
             state_.zoom_clock.restart();  // сбрасываем таймер после зума
+            state_.auto_zoom_enabled = false;
         }
     }
 
@@ -189,7 +191,7 @@ class SfmlEventHandler {
 public:
     using sender_concept = ex::sender_t;  // маркер сендера
 
-    // Парамтрический конструктор, инициализирующий сендер ссылками на SFML-ресурсы
+    // Параметрический конструктор, инициализирующий сендер ссылками на SFML-ресурсы
     // (ресурсы привязаны к хранилищу SfmlState и живут гарантированно дольше, чем сендер и все состояния операций)
     SfmlEventHandler(sf::RenderWindow &window, RenderSettings render_settings, AppState &state)
         : window_{window}, render_settings_{render_settings}, state_{state} {}

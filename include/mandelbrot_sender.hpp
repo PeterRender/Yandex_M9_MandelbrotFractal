@@ -29,7 +29,7 @@ static auto MakeComputeSender(RenderSettings settings, ViewPort viewport, bool &
             auto complex = Pixel2DToComplex(x, y, viewport, width, height);
             auto iters = CalculateIterationsForPoint(complex, settings.max_iterations, settings.escape_radius);
             auto [r, g, b] = IterationsToColor(iters, settings.max_iterations);
-            row_ptr[x] = {r, g, b, 0xFF};  // пишем цвет пиксела за одну операцию
+            row_ptr[x] = {r, g, b, OPAQUE};  // пишем цвет пиксела за одну операцию
         }
     };
 
