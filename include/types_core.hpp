@@ -7,6 +7,9 @@
 // ===================== Compile-time config =====================
 
 inline constexpr std::uint32_t THREAD_POOL_SIZE = 8;
+inline constexpr int STATS_INTERVAL = 10;  // интервал вывода статистики, в кадрах
+inline constexpr uint8_t OPAQUE = 0xFF;
+inline constexpr uint8_t TRANSPARENT = 0x00;
 
 // ===================== Render domain =====================
 
@@ -22,6 +25,14 @@ struct PixelRegion {
     std::uint32_t end_row{};
     std::uint32_t start_col{};
     std::uint32_t end_col{};
+};
+
+// Структура данных RGBA-пикселя
+struct alignas(4) RGBA {
+    uint8_t r{};
+    uint8_t g{};
+    uint8_t b{};
+    uint8_t a{};
 };
 
 struct ViewPort {
@@ -51,6 +62,7 @@ struct AppState {
     static constexpr ViewPort INITIAL_VIEWPORT{-2.5, 1.5, -2.0, 2.0};
 };
 
+// Класс точного таймера
 class FrameClock {
 public:
     FrameClock() { Reset(); }
